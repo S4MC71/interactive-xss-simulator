@@ -122,7 +122,7 @@
             position: relative;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(145deg, rgba(15,23,42,0.9), rgba(15,23,42,0.7));
+            background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(15,23,42,0.85));
             border: 1px solid rgba(255,255,255,0.06);
             backdrop-filter: blur(10px);
         }
@@ -136,10 +136,29 @@
             transition: opacity 0.4s;
             z-index: -1;
         }
-        .xss-card:hover { transform: translateY(-12px) scale(1.02); }
+        .xss-card:hover { transform: translateY(-8px) scale(1.02); }
         .xss-card:hover::before { opacity: 1; }
-        .xss-card .overlay { transition: all 0.35s ease; opacity: 0; backdrop-filter: blur(0px); }
-        .xss-card:hover .overlay { opacity: 1; backdrop-filter: blur(10px); }
+
+        /* Card base content fade out on hover */
+        .xss-card > *:not(.overlay) {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .xss-card:hover > *:not(.overlay) {
+            opacity: 0;
+            transform: scale(0.96);
+            pointer-events: none;
+        }
+
+        .xss-card .overlay {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            pointer-events: none;
+            background: #0f172a;
+        }
+        .xss-card:hover .overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         .card-sky { --card-gradient: linear-gradient(135deg, rgba(56,189,248,0.3), transparent 60%); }
         .card-rose { --card-gradient: linear-gradient(135deg, rgba(251,113,133,0.3), transparent 60%); }
@@ -434,113 +453,98 @@
     <main class="flex-grow flex justify-center items-start p-2 md:p-4 w-full relative z-10">
 
         <!-- ================= HOME SCENE ================= -->
-        <div id="scene-home" class="w-full max-w-6xl fade-in flex flex-col items-center mt-4 md:mt-8 mx-auto">
+        <div id="scene-home" class="w-full max-w-5xl fade-in flex flex-col items-center mt-6 md:mt-10 mx-auto">
 
             <!-- Hero -->
-            <div class="text-center mb-10 md:mb-14 px-4">
-                <div class="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-500/20 rounded-full px-4 py-1.5 text-sky-400 text-xs font-code mb-6">
+            <div class="text-center mb-8 md:mb-10 px-4">
+                <div class="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-500/20 rounded-full px-3.5 py-1 text-sky-400 text-xs font-code mb-4">
                     <div class="live-dot" style="width:6px;height:6px;background:#34d399;animation:liveRing 2s infinite;"></div>
-                    Interactive Security Lab — Educational Use Only
+                    Interactive Security Lab
                 </div>
-                <h2 class="text-3xl md:text-5xl lg:text-6xl font-black mb-4 tracking-tight">
-                    <span class="text-white">Select</span>
-                    <span class="logo-glow"> Threat Module</span>
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight text-white">
+                    Select a Module
                 </h2>
-                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-lg leading-relaxed">Step-by-step animated simulations to understand the mechanics, flow, and real-world impact of Cross-Site Scripting attacks.</p>
+                <p class="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">Simulate and understand Cross-Site Scripting attack vectors step by step.</p>
             </div>
 
             <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 w-full px-4">
 
                 <!-- Reflected XSS Card -->
-                <div class="xss-card card-sky rounded-2xl p-6 md:p-8 overflow-hidden group" role="button" aria-label="Reflected XSS Module">
-                    <!-- Risk badge -->
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-14 h-14 bg-sky-500/10 rounded-xl flex items-center justify-center border border-sky-500/20 shadow-[0_0_20px_rgba(56,189,248,0.15)] group-hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] transition-all">
-                            <i class="fas fa-reply text-2xl text-sky-400"></i>
+                <div class="xss-card card-sky rounded-2xl p-6 overflow-hidden group" role="button" aria-label="Reflected XSS Module" onclick="startSimulation('reflected')">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center border border-sky-500/20 shadow-[0_0_20px_rgba(56,189,248,0.15)] group-hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] transition-all">
+                            <i class="fas fa-reply text-xl text-sky-400"></i>
                         </div>
-                        <div class="flex flex-col items-end gap-1">
-                            <span class="badge-medium text-[10px] font-bold px-2 py-0.5 rounded-full">MEDIUM RISK</span>
-                            <span class="badge-easy text-[10px] font-bold px-2 py-0.5 rounded-full">EASY</span>
-                        </div>
+                        <span class="badge-easy text-[10px] font-bold px-2 py-0.5 rounded-full">EASY</span>
                     </div>
-                    <h3 class="text-xl font-black mb-2 text-white">Reflected XSS</h3>
-                    <p class="text-slate-400 text-sm mb-5 leading-relaxed">Malicious payload is reflected immediately off the server to the victim's browser — never stored. Commonly delivered via <span class="text-sky-400 font-medium">crafted phishing links</span>.</p>
-                    <div class="flex flex-wrap items-center gap-2 text-[10px] font-code text-slate-500">
+                    <h3 class="text-lg font-bold mb-2 text-white">Reflected XSS</h3>
+                    <p class="text-slate-400 text-xs mb-4 leading-relaxed">Server reflects input directly in the HTTP response without saving it. Delivered via links.</p>
+                    <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
                         <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">GET Request</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Parameter</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">No Persistence</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Query</span>
                     </div>
 
                     <!-- Hover Overlay -->
-                    <div class="overlay absolute inset-0 bg-slate-900/92 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
-                        <div class="w-16 h-16 rounded-full bg-sky-500/15 border border-sky-500/30 flex items-center justify-center mb-4 shadow-[0_0_25px_rgba(56,189,248,0.3)]">
-                            <i class="fas fa-rocket text-2xl text-sky-400"></i>
+                    <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
+                        <div class="w-12 h-12 rounded-full bg-sky-500/15 border border-sky-500/30 flex items-center justify-center mb-3">
+                            <i class="fas fa-play text-sky-400 text-sm"></i>
                         </div>
-                        <h4 class="text-xl font-black text-sky-400 mb-1">Reflected XSS</h4>
-                        <p class="text-sm text-slate-400 mb-6">Ready to simulate the attack flow?</p>
-                        <button onclick="startSimulation('reflected')" class="px-8 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(2,132,199,0.5)] hover:shadow-[0_0_30px_rgba(2,132,199,0.7)] text-sm">
-                            Launch Lab <i class="fas fa-arrow-right ml-2"></i>
+                        <h4 class="text-base font-bold text-sky-400 mb-4">Reflected XSS</h4>
+                        <button onclick="startSimulation('reflected')" class="px-6 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(2,132,199,0.5)] text-xs">
+                            Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Stored XSS Card -->
-                <div class="xss-card card-rose rounded-2xl p-6 md:p-8 overflow-hidden group" role="button" aria-label="Stored XSS Module">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-14 h-14 bg-rose-500/10 rounded-xl flex items-center justify-center border border-rose-500/20 shadow-[0_0_20px_rgba(251,113,133,0.15)] group-hover:shadow-[0_0_30px_rgba(251,113,133,0.4)] transition-all">
-                            <i class="fas fa-database text-2xl text-rose-400"></i>
+                <div class="xss-card card-rose rounded-2xl p-6 overflow-hidden group" role="button" aria-label="Stored XSS Module" onclick="startSimulation('stored')">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-12 h-12 bg-rose-500/10 rounded-xl flex items-center justify-center border border-rose-500/20 shadow-[0_0_20px_rgba(251,113,133,0.15)] group-hover:shadow-[0_0_30px_rgba(251,113,133,0.4)] transition-all">
+                            <i class="fas fa-database text-xl text-rose-400"></i>
                         </div>
-                        <div class="flex flex-col items-end gap-1">
-                            <span class="badge-hard text-[10px] font-bold px-2 py-0.5 rounded-full">HIGH RISK</span>
-                            <span class="badge-medium text-[10px] font-bold px-2 py-0.5 rounded-full">MEDIUM</span>
-                        </div>
+                        <span class="badge-medium text-[10px] font-bold px-2 py-0.5 rounded-full">MEDIUM</span>
                     </div>
-                    <h3 class="text-xl font-black mb-2 text-white">Stored XSS</h3>
-                    <p class="text-slate-400 text-sm mb-5 leading-relaxed">Payload is <span class="text-rose-400 font-medium">permanently stored in a database</span>. Every visitor who loads the affected page executes the script — no interaction needed from the attacker.</p>
-                    <div class="flex flex-wrap items-center gap-2 text-[10px] font-code text-slate-500">
+                    <h3 class="text-lg font-bold mb-2 text-white">Stored XSS</h3>
+                    <p class="text-slate-400 text-xs mb-4 leading-relaxed">Script saves to the database and executes automatically whenever anyone views the page.</p>
+                    <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
                         <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">POST Request</span>
                         <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Database</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Persistent</span>
                     </div>
-                    <div class="overlay absolute inset-0 bg-slate-900/92 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
-                        <div class="w-16 h-16 rounded-full bg-rose-500/15 border border-rose-500/30 flex items-center justify-center mb-4 shadow-[0_0_25px_rgba(251,113,133,0.3)]">
-                            <i class="fas fa-rocket text-2xl text-rose-400"></i>
+
+                    <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
+                        <div class="w-12 h-12 rounded-full bg-rose-500/15 border border-rose-500/30 flex items-center justify-center mb-3">
+                            <i class="fas fa-play text-rose-400 text-sm"></i>
                         </div>
-                        <h4 class="text-xl font-black text-rose-400 mb-1">Stored XSS</h4>
-                        <p class="text-sm text-slate-400 mb-6">Ready to simulate the attack flow?</p>
-                        <button onclick="startSimulation('stored')" class="px-8 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(225,29,72,0.5)] hover:shadow-[0_0_30px_rgba(225,29,72,0.7)] text-sm">
-                            Launch Lab <i class="fas fa-arrow-right ml-2"></i>
+                        <h4 class="text-base font-bold text-rose-400 mb-4">Stored XSS</h4>
+                        <button onclick="startSimulation('stored')" class="px-6 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(225,29,72,0.5)] text-xs">
+                            Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- DOM XSS Card -->
-                <div class="xss-card card-emerald rounded-2xl p-6 md:p-8 overflow-hidden group" role="button" aria-label="DOM XSS Module">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-14 h-14 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20 shadow-[0_0_20px_rgba(52,211,153,0.15)] group-hover:shadow-[0_0_30px_rgba(52,211,153,0.4)] transition-all">
-                            <i class="fas fa-code text-2xl text-emerald-400"></i>
+                <div class="xss-card card-emerald rounded-2xl p-6 overflow-hidden group" role="button" aria-label="DOM XSS Module" onclick="startSimulation('dom')">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20 shadow-[0_0_20px_rgba(52,211,153,0.15)] group-hover:shadow-[0_0_30px_rgba(52,211,153,0.4)] transition-all">
+                            <i class="fas fa-code text-xl text-emerald-400"></i>
                         </div>
-                        <div class="flex flex-col items-end gap-1">
-                            <span class="badge-hard text-[10px] font-bold px-2 py-0.5 rounded-full">CRITICAL RISK</span>
-                            <span class="badge-hard text-[10px] font-bold px-2 py-0.5 rounded-full">HARD</span>
-                        </div>
+                        <span class="badge-hard text-[10px] font-bold px-2 py-0.5 rounded-full">HARD</span>
                     </div>
-                    <h3 class="text-xl font-black mb-2 text-white">DOM-based XSS</h3>
-                    <p class="text-slate-400 text-sm mb-5 leading-relaxed">The vulnerability lives entirely in <span class="text-emerald-400 font-medium">client-side JavaScript</span>. The server never sees the payload — it executes through unsafe DOM manipulation in the browser.</p>
-                    <div class="flex flex-wrap items-center gap-2 text-[10px] font-code text-slate-500">
+                    <h3 class="text-lg font-bold mb-2 text-white">DOM-based XSS</h3>
+                    <p class="text-slate-400 text-xs mb-4 leading-relaxed">Vulnerability runs in browser JavaScript when processing unsafe DOM targets.</p>
+                    <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
                         <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Client-Side</span>
                         <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Hash</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">No Server</span>
                     </div>
-                    <div class="overlay absolute inset-0 bg-slate-900/92 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
-                        <div class="w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-4 shadow-[0_0_25px_rgba(52,211,153,0.3)]">
-                            <i class="fas fa-rocket text-2xl text-emerald-400"></i>
+
+                    <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
+                        <div class="w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-3">
+                            <i class="fas fa-play text-emerald-400 text-sm"></i>
                         </div>
-                        <h4 class="text-xl font-black text-emerald-400 mb-1">DOM XSS</h4>
-                        <p class="text-sm text-slate-400 mb-6">Ready to simulate the attack flow?</p>
-                        <button onclick="startSimulation('dom')" class="px-8 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:shadow-[0_0_30px_rgba(16,185,129,0.7)] text-sm">
-                            Launch Lab <i class="fas fa-arrow-right ml-2"></i>
+                        <h4 class="text-base font-bold text-emerald-400 mb-4">DOM XSS</h4>
+                        <button onclick="startSimulation('dom')" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] text-xs">
+                            Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
                         </button>
                     </div>
                 </div>
@@ -548,10 +552,10 @@
             </div>
 
             <!-- Legend -->
-            <div class="mt-10 flex flex-wrap justify-center gap-4 text-xs text-slate-500">
-                <div class="flex items-center gap-2"><span class="badge-easy px-2 py-0.5 rounded-full text-[10px]">EASY</span> Beginner-friendly</div>
-                <div class="flex items-center gap-2"><span class="badge-medium px-2 py-0.5 rounded-full text-[10px]">MEDIUM</span> Intermediate concepts</div>
-                <div class="flex items-center gap-2"><span class="badge-hard px-2 py-0.5 rounded-full text-[10px]">HARD</span> Advanced understanding</div>
+            <div class="mt-8 flex flex-wrap justify-center gap-6 text-xs text-slate-400 font-medium">
+                <div class="flex items-center gap-2"><span class="badge-easy px-2 py-0.5 rounded-full text-[10px]">EASY</span> Reflected</div>
+                <div class="flex items-center gap-2"><span class="badge-medium px-2 py-0.5 rounded-full text-[10px]">MEDIUM</span> Stored</div>
+                <div class="flex items-center gap-2"><span class="badge-hard px-2 py-0.5 rounded-full text-[10px]">HARD</span> DOM-based</div>
             </div>
         </div>
 
@@ -847,15 +851,15 @@
 <div class="diff-line-add"><span class="diff-marker-add">+</span><span class="text-purple-400">echo</span> <span class="text-green-300">"&lt;div&gt;"</span> . <span class="text-sky-300">$safe</span> . <span class="text-green-300">"&lt;/div&gt;"</span>; <span class="text-emerald-400 italic font-bold">// ✓ SAFE</span></div>
 <span class="text-purple-400">?&gt;</span>`,
                 stepExplanations: {
-                    0: '👋 Ready to begin. Enter any text (or use a Quick Payload) and click <strong>Search</strong> to start the simulation.',
-                    1: '📤 <strong>Step 1 — Input Captured:</strong> Your browser prepares to send the search query. Notice the URL updating with your input — this is the <span class="highlight-red">attack vector</span>.',
-                    2: '🌐 <strong>Step 2 — HTTP Request Sent:</strong> The browser sends a <span class="highlight-sky">GET request</span> to the server with your query embedded in the URL. A malicious attacker would send this URL as a phishing link.',
-                    3: '⚙️ <strong>Step 3 — Server Processes:</strong> The PHP server receives the request and reads <code>$_GET[\'q\']</code>. Because there is <span class="highlight-red">no htmlspecialchars()</span> call, the raw input flows directly into the HTML output.',
-                    4: '📥 <strong>Step 4 — HTTP Response:</strong> The server sends back an HTML page with your input <span class="highlight-red">embedded unescaped</span>. The payload is now inside a &lt;div&gt; tag in the response body.',
-                    5: '💥 <strong>Step 5 — Browser Renders:</strong> The browser parses the HTML. If the payload contains &lt;script&gt; tags or event handlers, the <span class="highlight-red">JavaScript executes immediately</span> — the attack is complete.'
+                    0: 'Ready to begin. Enter any input to start.',
+                    1: '<strong>Step 1: Input Captured</strong>. Query prepared in browser.',
+                    2: '<strong>Step 2: HTTP Request Sent</strong>. Browser sends GET request with payload.',
+                    3: '<strong>Step 3: Server Processes</strong>. PHP reads input without sanitization.',
+                    4: '<strong>Step 4: HTTP Response</strong>. Server returns response with raw payload.',
+                    5: '<strong>Step 5: Browser Renders</strong>. Browser executes the returned script.'
                 },
                 impactData: {
-                    type: 'Reflected XSS — Session Hijack / Phishing',
+                    type: 'Reflected XSS: Session Hijack / Phishing',
                     stolen: '🍪  session_id=abc123secret_stolen_data\n📧  User email: victim@example.com\n🔑  Auth token leaked to attacker\'s server',
                     how: 'The attacker crafts a malicious URL containing a script payload. When a victim clicks the link, the server reflects the payload back into the HTML response. The victim\'s browser executes the script, which can steal cookies, redirect the user, or display fake login forms.',
                     prevent: '✓  htmlspecialchars($input, ENT_QUOTES, "UTF-8")\n✓  Content-Security-Policy header\n✓  HttpOnly cookie flag\n✓  Input validation on server-side'
@@ -897,42 +901,42 @@
                     </div>
                 `,
                 codeTemplate: `<span class="text-purple-400">&lt;?php</span>
-<span class="text-slate-500">// --- POST: Attacker submits review ---</span>
+<span class="text-slate-500">// POST: Attacker submits review</span>
 <span class="text-sky-300">$review</span> = <span class="text-amber-300">$_POST</span>[<span class="text-green-300">'review'</span>];
 <span id="vuln-line-1" class="px-1 py-0.5 rounded inline-block w-full"><span class="text-sky-300">$db</span>->query(<span class="text-green-300">"INSERT INTO reviews (text)"</span>
         . <span class="text-green-300">" VALUES ('"</span>.<span class="text-sky-300">$review</span>.<span class="text-green-300">"')"</span>); <span class="text-red-400 italic font-bold text-[10px] ml-1">// NO SANITIZE</span></span>
 
-<span class="text-slate-500">// --- GET: Victim loads the page later ---</span>
+<span class="text-slate-500">// GET: Victim loads the page later</span>
 <span class="text-sky-300">$rows</span> = <span class="text-sky-300">$db</span>->query(<span class="text-green-300">"SELECT text FROM reviews"</span>);
 <span class="text-purple-400">foreach</span>(<span class="text-sky-300">$rows</span> <span class="text-purple-400">as</span> <span class="text-sky-300">$row</span>) {
 <span id="vuln-line-2" class="px-1 py-0.5 rounded inline-block w-full">  <span class="text-purple-400">echo</span> <span class="text-green-300">"&lt;div&gt;"</span> . <span class="text-sky-300">$row</span>[<span class="text-green-300">'text'</span>] . <span class="text-green-300">"&lt;/div&gt;"</span>; <span class="text-red-400 italic font-bold text-[10px] ml-1">// EXECUTION</span></span>
 }
 <span class="text-purple-400">?&gt;</span>`,
                 fixTemplate: `<span class="text-purple-400">&lt;?php</span>
-<span class="text-slate-500">// --- POST: Attacker submits review ---</span>
+<span class="text-slate-500">// POST: Attacker submits review</span>
 <span class="text-sky-300">$review</span> = <span class="text-amber-300">$_POST</span>[<span class="text-green-300">'review'</span>];
 <div class="diff-line-add"><span class="diff-marker-add">+</span><span class="text-sky-300">$safe</span> = <span class="text-amber-300">htmlspecialchars</span>(<span class="text-sky-300">$review</span>, <span class="text-amber-300">ENT_QUOTES</span>, <span class="text-green-300">'UTF-8'</span>);</div>
 <div class="diff-line-add"><span class="diff-marker-add">+</span><span class="text-sky-300">$stmt</span> = <span class="text-sky-300">$db</span>->prepare(<span class="text-green-300">"INSERT INTO reviews (text) VALUES (?)"</span>);</div>
 <div class="diff-line-add"><span class="diff-marker-add">+</span><span class="text-sky-300">$stmt</span>->execute([<span class="text-sky-300">$safe</span>]); <span class="text-emerald-400 italic font-bold">// ✓ Parameterized + Escaped</span></div>
 
-<span class="text-slate-500">// --- GET: Victim loads the page later ---</span>
+<span class="text-slate-500">// GET: Victim loads the page later</span>
 <span class="text-sky-300">$rows</span> = <span class="text-sky-300">$db</span>->query(<span class="text-green-300">"SELECT text FROM reviews"</span>);
 <span class="text-purple-400">foreach</span>(<span class="text-sky-300">$rows</span> <span class="text-purple-400">as</span> <span class="text-sky-300">$row</span>) {
 <div class="diff-line-add"><span class="diff-marker-add">+</span>  <span class="text-purple-400">echo</span> <span class="text-green-300">"&lt;div&gt;"</span> . <span class="text-amber-300">htmlspecialchars</span>(<span class="text-sky-300">$row</span>[<span class="text-green-300">'text'</span>]) . <span class="text-green-300">"&lt;/div&gt;"</span>; <span class="text-emerald-400 italic">// ✓ SAFE</span></div>
 }
 <span class="text-purple-400">?&gt;</span>`,
                 stepExplanations: {
-                    0: '👋 Ready to begin. Enter a review (or use a Quick Payload) and click <strong>Post Review</strong>. Stored XSS is especially dangerous because the payload affects <strong>every visitor</strong> — not just the attacker.',
-                    1: '📝 <strong>Step 1 — Input Captured:</strong> The attacker types a malicious payload into the review form. Unlike Reflected XSS, this input will be <span class="highlight-red">saved permanently</span>.',
-                    2: '📤 <strong>Step 2 — POST to Server:</strong> The browser sends a <span class="highlight-sky">POST request</span> with the review text. The server receives it with no indication it is malicious.',
-                    3: '💾 <strong>Step 3 — Saved to Database:</strong> The server stores the raw, unsanitized payload directly into the database. The payload now <span class="highlight-red">persists indefinitely</span>.',
-                    4: '👀 <strong>Step 4 — Victim Loads Page:</strong> An innocent user later visits the reviews page. The server fetches all reviews from the DB and echoes them into HTML — <span class="highlight-red">including the stored payload</span>.',
-                    5: '💥 <strong>Step 5 — Script Executes:</strong> The victim\'s browser parses the HTML, encounters the payload, and executes it. The attacker is <span class="highlight-red">not present</span> — the database does the work for them.'
+                    0: 'Ready to begin. Enter a review to start.',
+                    1: '<strong>Step 1: Input Captured</strong>. Review content captured from form.',
+                    2: '<strong>Step 2: POST to Server</strong>. Form submitted via POST request.',
+                    3: '<strong>Step 3: Saved to Database</strong>. Payload stored in database table.',
+                    4: '<strong>Step 4: Victim Loads Page</strong>. Page fetches reviews from database.',
+                    5: '<strong>Step 5: Script Executes</strong>. Browser renders review and runs payload.'
                 },
                 impactData: {
-                    type: 'Stored XSS — Persistent Mass Exploitation',
+                    type: 'Stored XSS: Persistent Mass Exploitation',
                     stolen: '🍪  session_id=abc123secret (all visitors)\n📧  Email + account data of every user\n💳  Payment page overlay / form hijacking\n🔁  Self-replicating worm (MySpace Samy worm)',
-                    how: 'The attacker posts a malicious review containing a script. This script is stored in the database. Every subsequent visitor who views the reviews page receives and executes the script — without any interaction from the attacker. This makes Stored XSS far more dangerous than Reflected XSS.',
+                    how: 'The attacker posts a malicious review containing a script. This script is stored in the database. Every subsequent visitor who views the reviews page receives and executes the script without requiring attacker interaction.',
                     prevent: '✓  htmlspecialchars() when outputting to HTML\n✓  Prepared statements (PDO) for DB inserts\n✓  Content-Security-Policy: script-src \'self\'\n✓  Input length limits and server-side validation\n✓  Output encoding library (e.g., OWASP Java Encoder)'
                 }
             },
@@ -970,18 +974,18 @@
                         </div>
                     </div>
                 `,
-                codeTemplate: `<span class="text-slate-500">// Client-side JavaScript — runs in Browser</span>
+                codeTemplate: `<span class="text-slate-500">// Client-side JavaScript: runs in Browser</span>
 <span class="text-purple-400">window</span>.onload = <span class="text-sky-300">function</span>() {
   <span class="text-slate-500">// 1. Extract hash fragment from URL</span>
   <span class="text-purple-400">let</span> hash = <span class="text-purple-400">window</span>.location.hash.<span class="text-amber-300">substring</span>(<span class="text-amber-300">1</span>);
 
   <span class="text-purple-400">if</span> (hash) {
     <span class="text-purple-400">let</span> decoded = <span class="text-sky-300">decodeURIComponent</span>(hash);
-    <span class="text-slate-500">// 2. Write to DOM via innerHTML — UNSAFE</span>
+    <span class="text-slate-500">// 2. Write to DOM via innerHTML (UNSAFE)</span>
 <span id="vuln-line" class="px-1 py-0.5 rounded inline-block w-full">    <span class="text-purple-400">document</span>.<span class="text-amber-300">getElementById</span>(<span class="text-green-300">'msg'</span>).<span class="text-red-400 font-bold">innerHTML</span> = decoded; <span class="text-red-400 italic ml-1 text-[10px]">// ← VULN</span></span>
   }
 };`,
-                fixTemplate: `<span class="text-slate-500">// Client-side JavaScript — runs in Browser</span>
+                fixTemplate: `<span class="text-slate-500">// Client-side JavaScript: runs in Browser</span>
 <span class="text-purple-400">window</span>.onload = <span class="text-sky-300">function</span>() {
   <span class="text-purple-400">let</span> hash = <span class="text-purple-400">window</span>.location.hash.<span class="text-amber-300">substring</span>(<span class="text-amber-300">1</span>);
 
@@ -993,17 +997,17 @@
   }
 };`,
                 stepExplanations: {
-                    0: '👋 Ready to begin. The DOM is read directly from the <span class="highlight-sky">URL hash (#)</span>. The server is never involved — this vulnerability lives entirely in client-side JavaScript.',
-                    1: '🔗 <strong>Step 1 — Hash Crafted:</strong> The URL is updated with your input after the <code>#</code> fragment. This never gets sent to the server — it stays in the browser.',
-                    2: '⚡ <strong>Step 2 — JS Reads Hash:</strong> <code>window.location.hash</code> is read by JavaScript. The value is decoded with <code>decodeURIComponent()</code> — any encoded payload becomes active HTML.',
-                    3: '🧬 <strong>Step 3 — innerHTML Set:</strong> The script writes the decoded value to the DOM using <span class="highlight-red">innerHTML</span>. This is the vulnerability — innerHTML <strong>parses HTML tags</strong> as live markup.',
-                    4: '🔥 <strong>Step 4 — DOM Modified:</strong> The browser parses the injected HTML. Any event handlers (<code>onerror</code>, <code>onload</code>) or script tags become part of the live page.',
-                    5: '💥 <strong>Step 5 — Script Executes:</strong> The event handler fires and <span class="highlight-red">JavaScript runs</span>. The server was never involved. The fix is simple: use <code class="text-emerald-400">textContent</code> instead of <code class="text-rose-400">innerHTML</code>.'
+                    0: 'Ready to begin. Payload read from URL hash fragment.',
+                    1: '<strong>Step 1: Hash Fragment</strong>. Input appended after URL # symbol.',
+                    2: '<strong>Step 2: JS Reads Hash</strong>. Script reads and decodes hash value.',
+                    3: '<strong>Step 3: innerHTML Target</strong>. Decoded value assigned via innerHTML.',
+                    4: '<strong>Step 4: DOM Mutation</strong>. Injected HTML added to live DOM.',
+                    5: '<strong>Step 5: Script Executes</strong>. Browser executes injected script.'
                 },
                 impactData: {
-                    type: 'DOM-based XSS — Client-Side Code Execution',
+                    type: 'DOM-based XSS: Client-Side Code Execution',
                     stolen: '🍪  session_id=abc123secret\n📋  Clipboard contents captured\n📸  Keylogger injected for credential theft\n🌐  Page content replaced (phishing overlay)',
-                    how: 'The entire attack happens in the browser — the server never sees the malicious payload. An attacker shares a link with a crafted URL fragment. When clicked, JavaScript on the page reads the fragment with window.location.hash and writes it to the DOM using innerHTML, which triggers the embedded script.',
+                    how: 'The entire attack happens in the browser without involving the server. JavaScript reads window.location.hash and assigns it directly to innerHTML.',
                     prevent: '✓  Use textContent instead of innerHTML\n✓  DOMPurify.sanitize() for rich HTML needs\n✓  Avoid document.write() and eval()\n✓  Content-Security-Policy: script-src \'self\'\n✓  Trusted Types API (modern browsers)'
                 }
             }
@@ -1218,7 +1222,7 @@
 
             isAnimating = false;
             el('live-dot').classList.add('hidden');
-            el('sim-status').innerText = 'Done — Try Again?';
+            el('sim-status').innerText = 'Completed';
             el('sim-status').className = 'text-slate-400';
         }
 
@@ -1256,7 +1260,7 @@
             const resContent = `HTTP/1.1 200 OK\r\nServer: Apache/2.4.41 (Ubuntu)\r\nDate: ${dateStr}\r\nContent-Type: text/html; charset=UTF-8\r\nX-Powered-By: PHP/8.1\r\nContent-Length: ${contentLength}\r\nX-XSS-Protection: 0\r\n\r\n${resHtml}`;
 
             await animateDataCard('response', resContent, isMalicious, el('code-panel'), el('node-server'));
-            addNetworkLog('200', 'Response', `OK — ${contentLength} bytes`, isMalicious, resContent);
+            addNetworkLog('200', 'Response', `OK (${contentLength} bytes)`, isMalicious, resContent);
             await fireLaser(1, false, isMalicious);
 
             setStep(5);
@@ -1268,8 +1272,6 @@
                 setTimeout(() => el('browser-ui').classList.remove('shake-intense'), 500);
                 el('injected-content').innerHTML = `<span class="bg-rose-100 text-rose-800 px-2 py-1 rounded font-code text-xs block">${escapeHTML(rawText)}</span>`;
                 showFakeAlert(rawText);
-                await waitWithPause(1500);
-                showImpactCard('reflected');
                 el('diff-toggle-btn').classList.remove('hidden');
                 if (currentModuleConfig) el('code-display').innerHTML = currentModuleConfig.codeTemplate;
                 updateLineNumbers(currentModuleConfig.codeTemplate);
@@ -1305,7 +1307,7 @@
 
             // DB interaction
             await fireLaser(2, true, isMalicious);
-            const dbContent = `-- SQL Query Executed:\n${isMalicious ? '-- ⚠️  UNSANITIZED INPUT STORED\n' : ''}INSERT INTO reviews (text, created_at)\nVALUES ('${rawText.replace(/'/g, "\\'")}', '${new Date().toISOString()}');\n\n-- ${isMalicious ? '☠️  Malicious payload now in database!' : '✓ Safe text stored.'}`;
+            const dbContent = `/* SQL Query Executed: */\n${isMalicious ? '/* ⚠️ UNSANITIZED INPUT STORED */\n' : ''}INSERT INTO reviews (text, created_at)\nVALUES ('${rawText.replace(/'/g, "\\'")}', '${new Date().toISOString()}');\n\n/* ${isMalicious ? '☠️ Malicious payload written to database.' : '✓ Safe text stored.'} */`;
             addNetworkLog('SQL', 'DB Event', `INSERT INTO reviews`, isMalicious, dbContent);
             await fireLaser(2, false, isMalicious);
 
@@ -1343,8 +1345,6 @@
             setTimeout(() => el('browser-ui').classList.remove('shake-intense'), 500);
             el('injected-content').innerHTML = `<span class="text-rose-700 font-code text-xs bg-rose-100 px-2 py-1 rounded block">${escapeHTML(rawText)}</span>`;
             showFakeAlert(rawText);
-            await waitWithPause(1500);
-            showImpactCard('stored');
             el('diff-toggle-btn').classList.remove('hidden');
         }
 
@@ -1387,7 +1387,7 @@
             if (vLine) vLine.classList.remove('bg-rose-900/80', 'text-white', 'bg-purple-900/50');
 
             setStep(4);
-            const domEvent = `// DOM Mutation:\ndocument.getElementById('msg').innerHTML = decoded;\n\n// What the browser parses:\n${rawText}\n\n// ${isMalicious ? '⚠️  Event handler found — script will execute!' : '✓ Plain text rendered safely.'}`;
+            const domEvent = `// DOM Mutation:\ndocument.getElementById('msg').innerHTML = decoded;\n\n// What the browser parses:\n${rawText}\n\n// ${isMalicious ? '⚠️ Event handler found: script will execute.' : '✓ Plain text rendered safely.'}`;
             addNetworkLog('DOM', 'Local Event', 'innerHTML mutation', isMalicious, domEvent);
             smoothScrollTo(el('browser-container'));
             await waitWithPause(600);
@@ -1410,8 +1410,6 @@
                 setTimeout(() => el('browser-ui').classList.remove('shake-intense'), 500);
                 el('injected-content').innerHTML = `<span class="bg-rose-100 text-rose-800 px-2 py-1 rounded font-code text-xs block">${escapeHTML(rawText)}</span>`;
                 showFakeAlert(rawText);
-                await waitWithPause(1500);
-                showImpactCard('dom');
                 el('diff-toggle-btn').classList.remove('hidden');
             } else {
                 el('injected-content').innerHTML = `Welcome, <strong class="text-emerald-600">${escapeHTML(rawText)}</strong>!`;
