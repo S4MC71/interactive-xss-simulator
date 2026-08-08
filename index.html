@@ -408,10 +408,15 @@
         </div>
 
         <div class="flex items-center gap-2 md:gap-3 flex-wrap justify-center hidden" id="header-controls">
-            <!-- Live Indicator -->
+            <!-- Active Module Pill -->
+            <div id="header-module-pill" class="flex items-center gap-1.5 text-xs font-bold font-code px-3 py-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-400">
+                <i class="fas fa-reply"></i>
+                <span>Reflected XSS</span>
+            </div>
+            <!-- Live Status -->
             <div class="flex items-center gap-2 text-xs font-code bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800" id="live-indicator-wrap">
                 <div class="live-dot hidden" id="live-dot"></div>
-                <span id="sim-status" class="text-slate-400 animate-pulse">Waiting...</span>
+                <span id="sim-status" class="text-slate-400">Waiting...</span>
             </div>
             <!-- Severity -->
             <div id="severity-chip" class="severity-chip sev-none">
@@ -453,106 +458,160 @@
     <main class="flex-grow flex justify-center items-start p-2 md:p-4 w-full relative z-10">
 
         <!-- ================= HOME SCENE ================= -->
-        <div id="scene-home" class="w-full max-w-5xl fade-in flex flex-col items-center mt-6 md:mt-10 mx-auto">
+        <div id="scene-home" class="w-full max-w-5xl fade-in flex flex-col items-center mt-6 md:mt-8 mx-auto gap-8">
 
-            <!-- Hero -->
-            <div class="text-center mb-8 md:mb-10 px-4">
-                <div class="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-500/20 rounded-full px-3.5 py-1 text-sky-400 text-xs font-code mb-4">
+            <!-- Hero Header -->
+            <div class="text-center px-4">
+                <div class="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-500/20 rounded-full px-3.5 py-1 text-sky-400 text-xs font-code mb-3">
                     <div class="live-dot" style="width:6px;height:6px;background:#34d399;animation:liveRing 2s infinite;"></div>
-                    Interactive Security Lab
+                    Interactive Security Sandbox
                 </div>
-                <h2 class="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight text-white">
-                    Select a Module
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-2 tracking-tight text-white">
+                    Web & XSS Security Lab
                 </h2>
-                <p class="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">Simulate and understand Cross-Site Scripting attack vectors step by step.</p>
+                <p class="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">Start with core web building blocks, then simulate XSS attack vectors step by step.</p>
             </div>
 
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 w-full px-4">
-
-                <!-- Reflected XSS Card -->
-                <div class="xss-card card-sky rounded-2xl p-6 overflow-hidden group" role="button" aria-label="Reflected XSS Module" onclick="startSimulation('reflected')">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center border border-sky-500/20 shadow-[0_0_20px_rgba(56,189,248,0.15)] group-hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] transition-all">
-                            <i class="fas fa-reply text-xl text-sky-400"></i>
+            <!-- SECTION 1: Web Fundamentals Concept (FIRST) -->
+            <div class="w-full px-4">
+                <div class="glass-panel rounded-2xl p-6 md:p-8 border border-sky-500/20 shadow-[0_0_30px_rgba(56,189,248,0.08)] flex flex-col md:flex-row gap-6 md:gap-8 items-center">
+                    
+                    <!-- Left: Theme Matched Image -->
+                    <div class="w-full md:w-1/2 relative rounded-xl overflow-hidden border border-slate-700/60 shadow-lg group cursor-pointer" onclick="openConceptModal()">
+                        <img src="html_css_js_concept.png" alt="HTML CSS JS Core Concepts" class="w-full h-auto object-cover rounded-xl transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-sky-600 text-white font-bold px-4 py-1.5 rounded-lg text-xs shadow"><i class="fas fa-search-plus mr-1"></i> Expand Diagram</span>
                         </div>
-                        <span class="badge-easy text-[10px] font-bold px-2 py-0.5 rounded-full">EASY</span>
-                    </div>
-                    <h3 class="text-lg font-bold mb-2 text-white">Reflected XSS</h3>
-                    <p class="text-slate-400 text-xs mb-4 leading-relaxed">Server reflects input directly in the HTTP response without saving it. Delivered via links.</p>
-                    <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">GET Request</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Query</span>
                     </div>
 
-                    <!-- Hover Overlay -->
-                    <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
-                        <div class="w-12 h-12 rounded-full bg-sky-500/15 border border-sky-500/30 flex items-center justify-center mb-3">
-                            <i class="fas fa-play text-sky-400 text-sm"></i>
+                    <!-- Right: Overview -->
+                    <div class="w-full md:w-1/2 flex flex-col gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-code bg-purple-500/15 border border-purple-500/30 text-purple-400">FOUNDATION</span>
+                            <h3 class="text-xl font-extrabold text-white">How Web Apps Work</h3>
                         </div>
-                        <h4 class="text-base font-bold text-sky-400 mb-4">Reflected XSS</h4>
-                        <button onclick="startSimulation('reflected')" class="px-6 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(2,132,199,0.5)] text-xs">
-                            Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
-                        </button>
+                        
+                        <p class="text-slate-300 text-xs leading-relaxed">Web applications rely on three core pillars. XSS vulnerabilities occur when untrusted user input leaks into HTML structure or JavaScript execution context.</p>
+
+                        <div class="grid grid-cols-3 gap-2 text-center font-code">
+                            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col items-center">
+                                <span class="text-xs font-bold text-sky-400">HTML</span>
+                                <span class="text-[10px] text-slate-400 mt-1">Structure</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col items-center">
+                                <span class="text-xs font-bold text-emerald-400">CSS</span>
+                                <span class="text-[10px] text-slate-400 mt-1">Styling</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col items-center">
+                                <span class="text-xs font-bold text-purple-400">JS</span>
+                                <span class="text-[10px] text-slate-400 mt-1">Logic / Brain</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-1">
+                            <button onclick="openConceptModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sky-400 font-bold rounded-xl transition-all text-xs flex items-center justify-center gap-2">
+                                <i class="fas fa-layer-group"></i> Read Full Concept Guide
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Stored XSS Card -->
-                <div class="xss-card card-rose rounded-2xl p-6 overflow-hidden group" role="button" aria-label="Stored XSS Module" onclick="startSimulation('stored')">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="w-12 h-12 bg-rose-500/10 rounded-xl flex items-center justify-center border border-rose-500/20 shadow-[0_0_20px_rgba(251,113,133,0.15)] group-hover:shadow-[0_0_30px_rgba(251,113,133,0.4)] transition-all">
-                            <i class="fas fa-database text-xl text-rose-400"></i>
-                        </div>
-                        <span class="badge-medium text-[10px] font-bold px-2 py-0.5 rounded-full">MEDIUM</span>
-                    </div>
-                    <h3 class="text-lg font-bold mb-2 text-white">Stored XSS</h3>
-                    <p class="text-slate-400 text-xs mb-4 leading-relaxed">Script saves to the database and executes automatically whenever anyone views the page.</p>
-                    <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">POST Request</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Database</span>
-                    </div>
-
-                    <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
-                        <div class="w-12 h-12 rounded-full bg-rose-500/15 border border-rose-500/30 flex items-center justify-center mb-3">
-                            <i class="fas fa-play text-rose-400 text-sm"></i>
-                        </div>
-                        <h4 class="text-base font-bold text-rose-400 mb-4">Stored XSS</h4>
-                        <button onclick="startSimulation('stored')" class="px-6 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(225,29,72,0.5)] text-xs">
-                            Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
-                        </button>
-                    </div>
+            <!-- SECTION 2: 3 XSS Threat Modules -->
+            <div class="w-full px-4 flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-shield-virus text-sky-400"></i> Select XSS Lab Module
+                    </h3>
+                    <span class="text-xs font-code text-slate-500">3 Interactive Labs</span>
                 </div>
 
-                <!-- DOM XSS Card -->
-                <div class="xss-card card-emerald rounded-2xl p-6 overflow-hidden group" role="button" aria-label="DOM XSS Module" onclick="startSimulation('dom')">
-                    <div class="flex justify-between items-start mb-5">
-                        <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20 shadow-[0_0_20px_rgba(52,211,153,0.15)] group-hover:shadow-[0_0_30px_rgba(52,211,153,0.4)] transition-all">
-                            <i class="fas fa-code text-xl text-emerald-400"></i>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 w-full">
+
+                    <!-- Reflected XSS Card -->
+                    <div class="xss-card card-sky rounded-2xl p-6 overflow-hidden group" role="button" aria-label="Reflected XSS Module" onclick="startSimulation('reflected')">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center border border-sky-500/20 shadow-[0_0_20px_rgba(56,189,248,0.15)] group-hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] transition-all">
+                                <i class="fas fa-reply text-xl text-sky-400"></i>
+                            </div>
+                            <span class="badge-easy text-[10px] font-bold px-2 py-0.5 rounded-full">EASY</span>
                         </div>
-                        <span class="badge-hard text-[10px] font-bold px-2 py-0.5 rounded-full">HARD</span>
-                    </div>
-                    <h3 class="text-lg font-bold mb-2 text-white">DOM-based XSS</h3>
-                    <p class="text-slate-400 text-xs mb-4 leading-relaxed">Vulnerability runs in browser JavaScript when processing unsafe DOM targets.</p>
-                    <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Client-Side</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Hash</span>
+                        <h3 class="text-lg font-bold mb-2 text-white">Reflected XSS</h3>
+                        <p class="text-slate-400 text-xs mb-4 leading-relaxed">Server reflects input directly in the HTTP response without saving it. Delivered via links.</p>
+                        <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
+                            <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">GET Request</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Query</span>
+                        </div>
+
+                        <!-- Hover Overlay -->
+                        <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
+                            <div class="w-12 h-12 rounded-full bg-sky-500/15 border border-sky-500/30 flex items-center justify-center mb-3">
+                                <i class="fas fa-play text-sky-400 text-sm"></i>
+                            </div>
+                            <h4 class="text-base font-bold text-sky-400 mb-4">Reflected XSS</h4>
+                            <button onclick="startSimulation('reflected')" class="px-6 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(2,132,199,0.5)] text-xs">
+                                Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
-                        <div class="w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-3">
-                            <i class="fas fa-play text-emerald-400 text-sm"></i>
+                    <!-- Stored XSS Card -->
+                    <div class="xss-card card-rose rounded-2xl p-6 overflow-hidden group" role="button" aria-label="Stored XSS Module" onclick="startSimulation('stored')">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="w-12 h-12 bg-rose-500/10 rounded-xl flex items-center justify-center border border-rose-500/20 shadow-[0_0_20px_rgba(251,113,133,0.15)] group-hover:shadow-[0_0_30px_rgba(251,113,133,0.4)] transition-all">
+                                <i class="fas fa-database text-xl text-rose-400"></i>
+                            </div>
+                            <span class="badge-medium text-[10px] font-bold px-2 py-0.5 rounded-full">MEDIUM</span>
                         </div>
-                        <h4 class="text-base font-bold text-emerald-400 mb-4">DOM XSS</h4>
-                        <button onclick="startSimulation('dom')" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] text-xs">
-                            Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
-                        </button>
+                        <h3 class="text-lg font-bold mb-2 text-white">Stored XSS</h3>
+                        <p class="text-slate-400 text-xs mb-4 leading-relaxed">Script saves to the database and executes automatically whenever anyone views the page.</p>
+                        <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
+                            <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">POST Request</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Database</span>
+                        </div>
+
+                        <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
+                            <div class="w-12 h-12 rounded-full bg-rose-500/15 border border-rose-500/30 flex items-center justify-center mb-3">
+                                <i class="fas fa-play text-rose-400 text-sm"></i>
+                            </div>
+                            <h4 class="text-base font-bold text-rose-400 mb-4">Stored XSS</h4>
+                            <button onclick="startSimulation('stored')" class="px-6 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(225,29,72,0.5)] text-xs">
+                                Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- DOM XSS Card -->
+                    <div class="xss-card card-emerald rounded-2xl p-6 overflow-hidden group" role="button" aria-label="DOM XSS Module" onclick="startSimulation('dom')">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20 shadow-[0_0_20px_rgba(52,211,153,0.15)] group-hover:shadow-[0_0_30px_rgba(52,211,153,0.4)] transition-all">
+                                <i class="fas fa-code text-xl text-emerald-400"></i>
+                            </div>
+                            <span class="badge-hard text-[10px] font-bold px-2 py-0.5 rounded-full">HARD</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-white">DOM-based XSS</h3>
+                        <p class="text-slate-400 text-xs mb-4 leading-relaxed">Vulnerability runs in browser JavaScript when processing unsafe DOM targets.</p>
+                        <div class="flex flex-wrap items-center gap-1.5 text-[10px] font-code text-slate-500">
+                            <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Client-Side</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700">URL Hash</span>
+                        </div>
+
+                        <div class="overlay absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-10 rounded-2xl">
+                            <div class="w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-3">
+                                <i class="fas fa-play text-emerald-400 text-sm"></i>
+                            </div>
+                            <h4 class="text-base font-bold text-emerald-400 mb-4">DOM XSS</h4>
+                            <button onclick="startSimulation('dom')" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] text-xs">
+                                Start Lab <i class="fas fa-arrow-right ml-1.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
 
             <!-- Legend -->
-            <div class="mt-8 flex flex-wrap justify-center gap-6 text-xs text-slate-400 font-medium">
+            <div class="mt-2 flex flex-wrap justify-center gap-6 text-xs text-slate-400 font-medium">
                 <div class="flex items-center gap-2"><span class="badge-easy px-2 py-0.5 rounded-full text-[10px]">EASY</span> Reflected</div>
                 <div class="flex items-center gap-2"><span class="badge-medium px-2 py-0.5 rounded-full text-[10px]">MEDIUM</span> Stored</div>
                 <div class="flex items-center gap-2"><span class="badge-hard px-2 py-0.5 rounded-full text-[10px]">HARD</span> DOM-based</div>
@@ -561,39 +620,6 @@
 
         <!-- ================= SIMULATION SCENE ================= -->
         <div id="scene-sim" class="w-full max-w-[1400px] hidden flex-col gap-4 md:gap-5 pb-10 mx-auto opacity-0 transition-opacity duration-500">
-
-            <!-- Title Bar + Step Progress -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 px-1 pt-1">
-                <div class="flex items-center gap-3">
-                    <span id="sim-title-bar" class="text-sm font-bold text-slate-300"></span>
-                </div>
-                <div class="flex items-center gap-4 w-full sm:w-auto">
-                    <!-- Step progress -->
-                    <div class="flex flex-col gap-1 flex-1">
-                        <div class="flex items-center justify-between text-[10px] font-code text-slate-500">
-                            <span id="step-label">Step 0 of 5</span>
-                            <span id="step-name-label" class="text-slate-600">–</span>
-                        </div>
-                        <div id="step-progress" class="step-bar">
-                            <div class="step-dot" id="sdot-0" style="--step-color:#38bdf8"></div>
-                            <div class="step-dot" id="sdot-1" style="--step-color:#38bdf8"></div>
-                            <div class="step-dot" id="sdot-2" style="--step-color:#38bdf8"></div>
-                            <div class="step-dot" id="sdot-3" style="--step-color:#38bdf8"></div>
-                            <div class="step-dot" id="sdot-4" style="--step-color:#38bdf8"></div>
-                        </div>
-                    </div>
-                    <!-- Threat Meter -->
-                    <div class="flex flex-col gap-1 w-28">
-                        <div class="flex items-center justify-between text-[10px] font-code text-slate-500">
-                            <span>Threat</span>
-                            <span id="threat-pct" class="text-slate-400">0%</span>
-                        </div>
-                        <div class="threat-track">
-                            <div class="threat-fill" id="threat-fill" style="width:0%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Network Visualizer -->
             <div class="flex-none h-28 md:h-44 glass-panel rounded-2xl p-3 md:p-5 relative flex items-center justify-between shadow-inner overflow-hidden" id="visualizer-map">
@@ -778,6 +804,63 @@
                         <i class="fas fa-code-branch mr-1"></i>See the Fix
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== WEB CONCEPTS MODAL ===== -->
+    <div id="concept-modal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-sm hidden z-[250] flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3 shrink-0">
+                <h3 class="font-black text-white text-lg flex items-center gap-2">
+                    <i class="fas fa-cubes text-purple-400"></i> Core Web Concepts & XSS Mechanics
+                </h3>
+                <button onclick="closeConceptModal()" class="text-slate-500 hover:text-white transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+            
+            <div class="flex flex-col gap-6">
+                <!-- Concept Graphic -->
+                <div class="w-full rounded-xl overflow-hidden border border-slate-800 bg-slate-950 p-2">
+                    <img src="html_css_js_concept.png" alt="HTML CSS JS Diagram" class="w-full h-auto rounded-lg">
+                </div>
+
+                <!-- Breakdown Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800/40 p-4 rounded-xl border border-sky-500/20">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-xs">1</span>
+                            <h4 class="font-bold text-sky-400 text-sm">HTML (Structure)</h4>
+                        </div>
+                        <p class="text-slate-300 text-xs leading-relaxed">Defines DOM elements, text, and structure. <strong>Reflected & Stored XSS</strong> occur when unescaped user input renders raw HTML tags directly into the response.</p>
+                    </div>
+
+                    <div class="bg-slate-800/40 p-4 rounded-xl border border-emerald-500/20">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">2</span>
+                            <h4 class="font-bold text-emerald-400 text-sm">CSS (Styling)</h4>
+                        </div>
+                        <p class="text-slate-300 text-xs leading-relaxed">Controls presentation, fonts, and layout. While CSS alters appearance, it cannot execute code directly without JS or inline handlers.</p>
+                    </div>
+
+                    <div class="bg-slate-800/40 p-4 rounded-xl border border-purple-500/20">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">3</span>
+                            <h4 class="font-bold text-purple-400 text-sm">JS (Logic/Behavior)</h4>
+                        </div>
+                        <p class="text-slate-300 text-xs leading-relaxed">Executes logic and manipulates the DOM dynamically. <strong>DOM-based XSS</strong> occurs when client JS reads unsafe sources (e.g. location.hash) and assigns them to sinks (e.g. innerHTML).</p>
+                    </div>
+                </div>
+
+                <div class="bg-sky-950/30 border border-sky-500/30 rounded-xl p-4 text-xs text-sky-200 leading-relaxed flex items-start gap-3">
+                    <i class="fas fa-lightbulb text-sky-400 text-base mt-0.5"></i>
+                    <div>
+                        <strong>Key Takeaway:</strong> Cross-Site Scripting (XSS) happens when untrusted user data crosses the boundary between content and executable code (HTML or JS). Use the 3 labs below to see how each vector functions!
+                    </div>
+                </div>
+
+                <button onclick="closeConceptModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all text-xs shadow">
+                    Got It — Explore Labs <i class="fas fa-arrow-right ml-1"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -1050,30 +1133,21 @@
             const config = currentModuleConfig;
             const steps = config ? config.steps : [];
             const total = steps.length;
-            const color = config ? (config.color === 'sky' ? '#38bdf8' : config.color === 'rose' ? '#fb7185' : '#34d399') : '#38bdf8';
+            const stepName = nameLabelOverride || (steps[idx - 1] || '');
 
-            el('step-label').textContent = `Step ${idx} of ${total}`;
-            el('step-name-label').textContent = nameLabelOverride || (steps[idx - 1] || '–');
-
-            for (let i = 0; i < 5; i++) {
-                const dot = el(`sdot-${i}`);
-                dot.style.setProperty('--step-color', color);
-                if (i < idx) dot.className = 'step-dot done';
-                else if (i === idx - 1) { dot.className = 'step-dot active'; }
-                else dot.className = 'step-dot';
+            const statusEl = el('sim-status');
+            if (statusEl) {
+                if (idx > 0 && total > 0) {
+                    statusEl.innerText = `Step ${idx}/${total}: ${stepName}`;
+                } else if (idx === 0) {
+                    statusEl.innerText = 'Waiting for Input...';
+                } else {
+                    statusEl.innerText = stepName || 'Ready';
+                }
             }
-
-            // Threat level
-            const threatMap = { 0: 0, 1: 10, 2: 25, 3: 50, 4: 75, 5: 100 };
-            setThreat(threatMap[idx] || 0);
-
-
         }
 
-        function setThreat(pct) {
-            el('threat-fill').style.width = pct + '%';
-            el('threat-pct').textContent = pct + '%';
-        }
+        function setThreat(pct) {}
 
         function setSeverity(level) {
             const chip = el('severity-chip');
@@ -1098,7 +1172,12 @@
             storedPayload = null;
             isDiffShown = false;
 
-            el('sim-title-bar').innerHTML = `<span class="flex items-center gap-2 text-sm font-bold"><i class="fas ${config.icon} text-${config.color}-400"></i><span class="text-${config.color}-400">${config.title}</span></span>`;
+            const modPill = el('header-module-pill');
+            if (modPill) {
+                modPill.innerHTML = `<i class="fas ${config.icon} text-xs"></i><span>${config.title.replace(' Module', '')}</span>`;
+                const borderClr = config.color === 'sky' ? 'border-sky-500/30 bg-sky-500/10 text-sky-400' : config.color === 'rose' ? 'border-rose-500/30 bg-rose-500/10 text-rose-400' : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400';
+                modPill.className = `flex items-center gap-1.5 text-xs font-bold font-code px-3 py-1.5 rounded-full border ${borderClr}`;
+            }
             el('browser-url').innerHTML = escapeHTML(config.url);
             el('module-content').innerHTML = config.htmlTemplate;
 
@@ -1663,6 +1742,16 @@
             setTimeout(() => el('shortcuts-modal').classList.add('hidden'), 300);
         }
 
+        // ===== WEB CONCEPTS MODAL =====
+        function openConceptModal() {
+            el('concept-modal').classList.remove('hidden');
+            setTimeout(() => el('concept-modal').classList.remove('opacity-0'), 10);
+        }
+        function closeConceptModal() {
+            el('concept-modal').classList.add('opacity-0');
+            setTimeout(() => el('concept-modal').classList.add('hidden'), 300);
+        }
+
         // ===== RELOAD (Stored XSS) =====
         function reloadBrowser() {
             if (isAnimating) return;
@@ -1689,6 +1778,7 @@
             // Close impact on backdrop
             if (e.target && e.target.id === 'impact-card') closeImpactCard();
             if (e.target && e.target.id === 'shortcuts-modal') closeShortcutsModal();
+            if (e.target && e.target.id === 'concept-modal') closeConceptModal();
         });
 
         // ===== PAUSE LOGIC =====
@@ -1706,6 +1796,7 @@
                 closeNetworkModal();
                 closeImpactCard();
                 closeShortcutsModal();
+                closeConceptModal();
             }
             if (e.key === '?' || e.key === '/') {
                 openShortcutsModal();
